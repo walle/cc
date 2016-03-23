@@ -21,6 +21,8 @@ var solveTests = []struct {
 	{5, 5, []Piece{Queen, Queen, Queen, Queen, Queen}, 10},
 	{6, 6, []Piece{Queen, Queen, Queen, Queen, Queen, Queen}, 4},
 	{7, 7, []Piece{Queen, Queen, Queen, Queen, Queen, Queen, Queen}, 40},
+	{2, 2, []Piece{Rook, Rook, Rook}, 0},
+	{3, 3, []Piece{Bishop, Bishop, Bishop, Bishop, Bishop, Bishop, Bishop, Bishop, Bishop, Bishop}, 0},
 	//{8, 8, []Piece{Queen, Queen, Queen, Queen, Queen, Queen, Queen, Queen}, 92},
 	//{7, 7, []Piece{Queen, Queen, Bishop, Bishop, Knight, King, King}, 3062636},
 }
@@ -150,6 +152,17 @@ func Benchmark7x7Q2B2N1K2(b *testing.B) {
 		Solve(7, 7, p, &solutions)
 		if len(solutions) != 3062636 {
 			b.Errorf("Expected %d got %d", 3062636, len(solutions))
+		}
+	}
+}
+
+func Benchmark3x3B10(b *testing.B) {
+	for n := 0; n < b.N; n++ {
+		solutions := make([]Board, 0)
+		p := []Piece{Bishop, Bishop, Bishop, Bishop, Bishop, Bishop, Bishop, Bishop, Bishop, Bishop}
+		Solve(3, 3, p, &solutions)
+		if len(solutions) != 0 {
+			b.Errorf("Expected %d got %d", 0, len(solutions))
 		}
 	}
 }
