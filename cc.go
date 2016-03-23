@@ -5,6 +5,12 @@ package cc
 func Solve(columns, rows int, pieces []Piece, solutions *[]Board) {
 	np := len(pieces)
 
+	// No possible solutions
+	if np != 1 && np >= columns*rows {
+		*solutions = []Board{}
+		return
+	}
+
 	b := NewBoard(columns, rows)
 	place(b, pieces, solutions, 0)
 
