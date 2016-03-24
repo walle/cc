@@ -21,8 +21,8 @@ var solveTests = []struct {
 	{4, 4, []Piece{Queen, Queen, Queen, Queen}, 2},
 	{5, 5, []Piece{Queen, Queen, Queen, Queen, Queen}, 10},
 	{6, 6, []Piece{Queen, Queen, Queen, Queen, Queen, Queen}, 4},
-	//{7, 7, []Piece{Queen, Queen, Queen, Queen, Queen, Queen, Queen}, 40},
-	//{2, 2, []Piece{Rook, Rook, Rook}, 0},
+	{7, 7, []Piece{Queen, Queen, Queen, Queen, Queen, Queen, Queen}, 40},
+	{2, 2, []Piece{Rook, Rook, Rook}, 0},
 	//{8, 8, []Piece{Queen, Queen, Queen, Queen, Queen, Queen, Queen, Queen}, 92},
 	//{7, 7, []Piece{Queen, Queen, Bishop, Bishop, Knight, King, King}, 3062636},
 }

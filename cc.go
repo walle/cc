@@ -1,5 +1,9 @@
 package cc
 
+import (
+	"sync"
+)
+
 // Solve populates solutions with valid boards of the dimensions columns*rows
 // with valid configurations for pieces.
 func Solve(columns, rows uint8, pieces []Piece, solutions *map[string]bool) {
@@ -10,16 +14,68 @@ func Solve(columns, rows uint8, pieces []Piece, solutions *map[string]bool) {
 		return
 	}
 
-	b := NewBoard(columns, rows)
-	place(b, pieces, solutions)
+	wg := &sync.WaitGroup{}
+	ch := make(chan string)
+
+	// Start a goroutine for each possible starting position
+	for j := uint8(0); j < rows; j++ {
+		for i := uint8(0); i < columns; i++ {
+			wg.Add(1)
+			go func(i, j uint8) {
+				b := NewBoard(columns, rows)
+				// Shift the pieces to get the first
+				p, pieces := pieces[0], pieces[1:]
+				cc := Cell(0)
+				switch p {
+				case King:
+					cc = Cell(King)
+				case Rook:
+					cc = Cell(Rook)
+				case Queen:
+					cc = Cell(Queen)
+				case Bishop:
+					cc = Cell(Bishop)
+				case Knight:
+					cc = Cell(Knight)
+				}
+				b.cells[j][i] = cc // Place the piece
+
+				// Mark all dead cells
+				tr := p.Threatening(&b, i, j)
+				for _, t := range tr {
+					b.cells[t.y][t.x] = Cell(Dead)
+				}
+				place(b, pieces, ch)
+				wg.Done()
+			}(i, j)
+		}
+	}
+
+	// Syncronize the go routines by closing the channel when they are finished
+	go func(wg *sync.WaitGroup, ch chan string) {
+		wg.Wait()
+		close(ch)
+	}(wg, ch)
+
+	// Syncronize the read from the channel so we dont exit to fast
+	done := make(chan bool, 1)
+	go func(ch <-chan string, done chan<- bool) {
+		for s := range ch {
+			(*solutions)[s] = true
+		}
+		done <- true
+	}(ch, done)
+
+	<-done
 }
 
 // place tries to place the next piece on the board and recurse down
 // the search tree. Appends the board and returns when a valid configuration
 // is found.
-func place(board Board, pieces []Piece, solutions *map[string]bool) {
+func place(board Board, pieces []Piece, ch chan<- string) {
 	if len(pieces) == 0 {
-		(*solutions)[board.Notation()] = true
+		//(*solutions)[board.Notation()] = true
+		ch <- board.Notation()
 		return
 	}
 
@@ -77,7 +133,7 @@ func place(board Board, pieces []Piece, solutions *map[string]bool) {
 				}
 
 				// Recurse down with new board
-				place(b2, pieces, solutions)
+				place(b2, pieces, ch)
 			}
 		}
 	}
