@@ -5,18 +5,19 @@ import "fmt"
 // Board represents a chess board. It contains columns*rows cells that can be
 // occupied by pieces.
 type Board struct {
-	columns int
-	rows    int
-	cells   []Cell
+	columns uint8
+	rows    uint8
+	cells   [][]Cell
 }
 
 // NewBoard creates a new board of dimensions (columns*rows) with only
 // empty cells.
-func NewBoard(columns, rows int) Board {
-	c := make([]Cell, columns*rows)
-	for j := 0; j < rows; j++ {
-		for i := 0; i < columns; i++ {
-			c[columns*j+i] = Cell{x: i, y: j, piece: nil, dead: false}
+func NewBoard(columns, rows uint8) Board {
+	c := make([][]Cell, rows)
+	for j := uint8(0); j < rows; j++ {
+		c[j] = make([]Cell, columns)
+		for i := uint8(0); i < columns; i++ {
+			c[j][i] = Cell(Blank)
 		}
 	}
 	return Board{columns: columns, rows: rows, cells: c}
@@ -25,9 +26,25 @@ func NewBoard(columns, rows int) Board {
 // Notation returns the board configuration using common notation.
 func (b Board) Notation() string {
 	ret := ""
-	for _, c := range b.cells {
-		if c.piece != nil {
-			ret += fmt.Sprintf("%s%s%d,", c.piece, string(97+c.x), c.y+1)
+	for j := uint8(0); j < b.rows; j++ {
+		for i := uint8(0); i < b.columns; i++ {
+			var cc Piece
+			c := b.cells[j][i]
+			switch c {
+			case Cell(Blank), Cell(Dead):
+				continue
+			case Cell(King):
+				cc = King
+			case Cell(Rook):
+				cc = Rook
+			case Cell(Queen):
+				cc = Queen
+			case Cell(Bishop):
+				cc = Bishop
+			case Cell(Knight):
+				cc = Knight
+			}
+			ret += fmt.Sprintf("%s%s%d,", cc, string(97+i), j+1)
 		}
 	}
 	return ret
@@ -38,18 +55,27 @@ func (b Board) Notation() string {
 // by their individual symbol.
 func (b Board) Ascii() string {
 	ret := ""
-	for j := 0; j < b.rows; j++ {
-		for i := 0; i < b.columns; i++ {
-			c := b.cells[b.columns*j+i]
-			if c.piece == nil {
-				if c.dead {
-					ret += "X"
-				} else {
-					ret += "."
-				}
-			} else {
-				ret += fmt.Sprintf("%s", c.piece)
+	for j := uint8(0); j < b.rows; j++ {
+		for i := uint8(0); i < b.columns; i++ {
+			c := b.cells[j][i]
+			var cc Piece
+			switch c {
+			case Cell(Blank):
+				cc = Blank
+			case Cell(Dead):
+				cc = Dead
+			case Cell(King):
+				cc = King
+			case Cell(Rook):
+				cc = Rook
+			case Cell(Queen):
+				cc = Queen
+			case Cell(Bishop):
+				cc = Bishop
+			case Cell(Knight):
+				cc = Knight
 			}
+			ret += fmt.Sprintf(" %s", cc)
 		}
 		ret += "\n"
 	}

@@ -1,67 +1,71 @@
 package cc
 
-import (
-	"fmt"
-	"math"
-)
+import "fmt"
 
 // Piece is the interface used to be able to use different implementation details
 // for the different kinds of pieces.
-// Since it only have one method it should be called Threatener according to Go
-// best practices, but Piece carries more description of what really is.
 type Piece interface {
-	Threatening(b *Board, x, y int) []Cell
+	String() string
+	Threatening(b *Board, x, y uint8) []Position
 }
 
-type king string
-type queen string
-type bishop string
-type rook string
-type knight string
+type blank Cell
+type dead Cell
+type king Cell
+type queen Cell
+type bishop Cell
+type rook Cell
+type knight Cell
 
 // The pieces available
 // Since they don't carry state use one instace
 const (
-	King   king   = "K" //"♚"
-	Queen  queen  = "Q" //"♛"
-	Bishop bishop = "B" //"♝"
-	Rook   rook   = "R" //"♜"
-	Knight knight = "N" //"♞"
+	Blank  blank  = 0 //"."
+	Dead   dead   = 1 //"X"
+	King   king   = 5 //"K" //"♚"
+	Queen  queen  = 6 //"Q" //"♛"
+	Bishop bishop = 7 //"B" //"♝"
+	Rook   rook   = 8 //"R" //"♜"
+	Knight knight = 9 //"N" //"♞"
 )
 
-func (p rook) Threatening(b *Board, x, y int) []Cell {
+func (p rook) Threatening(b *Board, x, y uint8) []Position {
 	if x < 0 || y < 0 || x >= b.columns || y >= b.rows {
-		return []Cell{}
+		return []Position{}
 	}
-	ret := make([]Cell, 0)
-	for i := 0; i < b.columns; i++ {
-		for j := 0; j < b.rows; j++ {
+	ret := make([]Position, 0)
+	for i := uint8(0); i < b.columns; i++ {
+		for j := uint8(0); j < b.rows; j++ {
 			if i == x && j != y {
-				ret = append(ret, Cell{x: i, y: j})
+				ret = append(ret, Position{x: i, y: j})
 			}
 			if i != x && j == y {
-				ret = append(ret, Cell{x: i, y: j})
+				ret = append(ret, Position{x: i, y: j})
 			}
 		}
 	}
 	return ret
 }
 
-func (p king) Threatening(b *Board, x, y int) []Cell {
+func (p rook) String() string {
+	return "R"
+}
+
+func (p king) Threatening(b *Board, x, y uint8) []Position {
 	if x < 0 || y < 0 || x >= b.columns || y >= b.rows {
-		return []Cell{}
+		return []Position{}
 	}
-	t := []Cell{
-		Cell{x: x - 1, y: y},
-		Cell{x: x - 1, y: y - 1},
-		Cell{x: x, y: y - 1},
-		Cell{x: x + 1, y: y - 1},
-		Cell{x: x + 1, y: y},
-		Cell{x: x + 1, y: y + 1},
-		Cell{x: x, y: y + 1},
-		Cell{x: x - 1, y: y + 1},
+	t := []Position{
+		Position{x: x - 1, y: y},
+		Position{x: x - 1, y: y - 1},
+		Position{x: x, y: y - 1},
+		Position{x: x + 1, y: y - 1},
+		Position{x: x + 1, y: y},
+		Position{x: x + 1, y: y + 1},
+		Position{x: x, y: y + 1},
+		Position{x: x - 1, y: y + 1},
 	}
-	ret := make([]Cell, 0)
+	ret := make([]Position, 0)
 	for _, c := range t {
 		if c.x < 0 || c.y < 0 || c.x >= b.columns || c.y >= b.rows {
 			continue
@@ -71,21 +75,25 @@ func (p king) Threatening(b *Board, x, y int) []Cell {
 	return ret
 }
 
-func (p knight) Threatening(b *Board, x, y int) []Cell {
+func (p king) String() string {
+	return "K"
+}
+
+func (p knight) Threatening(b *Board, x, y uint8) []Position {
 	if x < 0 || y < 0 || x >= b.columns || y >= b.rows {
-		return []Cell{} // TODO: Should be error
+		return []Position{} // TODO: Should be error
 	}
-	t := []Cell{
-		Cell{x: x - 1, y: y - 2},
-		Cell{x: x + 1, y: y - 2},
-		Cell{x: x - 2, y: y - 1},
-		Cell{x: x + 2, y: y - 1},
-		Cell{x: x - 2, y: y + 1},
-		Cell{x: x + 2, y: y + 1},
-		Cell{x: x - 1, y: y + 2},
-		Cell{x: x + 1, y: y + 2},
+	t := []Position{
+		Position{x: x - 1, y: y - 2},
+		Position{x: x + 1, y: y - 2},
+		Position{x: x - 2, y: y - 1},
+		Position{x: x + 2, y: y - 1},
+		Position{x: x - 2, y: y + 1},
+		Position{x: x + 2, y: y + 1},
+		Position{x: x - 1, y: y + 2},
+		Position{x: x + 1, y: y + 2},
 	}
-	ret := make([]Cell, 0)
+	ret := make([]Position, 0)
 	for _, c := range t {
 		if c.x < 0 || c.y < 0 || c.x >= b.columns || c.y >= b.rows {
 			continue
@@ -95,29 +103,42 @@ func (p knight) Threatening(b *Board, x, y int) []Cell {
 	return ret
 }
 
-func (p queen) Threatening(b *Board, x, y int) []Cell {
+func (p knight) String() string {
+	return "N"
+}
+
+func (p queen) Threatening(b *Board, x, y uint8) []Position {
 	if x < 0 || y < 0 || x >= b.columns || y >= b.rows {
-		return []Cell{}
+		return []Position{}
 	}
-	ret := make([]Cell, 0)
-	for i := 0; i < b.columns; i++ {
-		for j := 0; j < b.rows; j++ {
+	/*ret := make([]Position, 0)
+	for i := uint8(0); i < b.columns; i++ {
+		for j := uint8(0); j < b.rows; j++ {
 			if i == x || j == y || math.Abs(float64(j-y)) == math.Abs(float64(i-x)) {
 				if i == x && j == y {
 					continue
 				}
-				ret = append(ret, Cell{x: i, y: j})
+				ret = append(ret, Position{x: i, y: j})
 			}
 		}
 	}
+	return ret*/
+
+	ret := make([]Position, 0, b.columns*b.rows)
+	ret = append(ret, Rook.Threatening(b, x, y)...)
+	ret = append(ret, Bishop.Threatening(b, x, y)...)
 	return ret
 }
 
-func (p bishop) Threatening(b *Board, x, y int) []Cell {
+func (p queen) String() string {
+	return "Q"
+}
+
+func (p bishop) Threatening(b *Board, x, y uint8) []Position {
 	if x < 0 || y < 0 || x >= b.columns || y >= b.rows {
-		return []Cell{}
+		return []Position{}
 	}
-	ret := make([]Cell, 0)
+	m := make(map[string]Position)
 	i := x
 	j := y
 	for {
@@ -129,7 +150,7 @@ func (p bishop) Threatening(b *Board, x, y int) []Cell {
 		}
 		i++
 		j++
-		ret = append(ret, Cell{x: i, y: j})
+		m[fmt.Sprintf("%d,%d", i, j)] = Position{x: i, y: j}
 	}
 	i = x
 	j = y
@@ -142,7 +163,7 @@ func (p bishop) Threatening(b *Board, x, y int) []Cell {
 		}
 		i++
 		j--
-		ret = append(ret, Cell{x: i, y: j})
+		m[fmt.Sprintf("%d,%d", i, j)] = Position{x: i, y: j}
 	}
 	i = x
 	j = y
@@ -155,7 +176,7 @@ func (p bishop) Threatening(b *Board, x, y int) []Cell {
 		}
 		i--
 		j--
-		ret = append(ret, Cell{x: i, y: j})
+		m[fmt.Sprintf("%d,%d", i, j)] = Position{x: i, y: j}
 	}
 	i = x
 	j = y
@@ -168,26 +189,35 @@ func (p bishop) Threatening(b *Board, x, y int) []Cell {
 		}
 		i--
 		j++
-		ret = append(ret, Cell{x: i, y: j})
+		m[fmt.Sprintf("%d,%d", i, j)] = Position{x: i, y: j}
 	}
 
-	r := make([]Cell, 0)
-	for _, c := range ret {
+	ret := make([]Position, 0, b.columns*b.rows)
+	for _, c := range m {
 		if c.x < 0 || c.y < 0 || c.x >= b.columns || c.y >= b.rows {
 			continue
 		}
-		r = append(r, c)
+		ret = append(ret, c)
 	}
+	return ret
+}
 
-	ret2 := make([]Cell, 0)
-	m := make(map[string]Cell)
-	for _, c := range r {
-		m[fmt.Sprintf("%d,%d", c.x, c.y)] = c
-	}
+func (p bishop) String() string {
+	return "B"
+}
 
-	for _, v := range m {
-		ret2 = append(ret2, v)
-	}
+func (p blank) String() string {
+	return "."
+}
 
-	return ret2
+func (p blank) Threatening(b *Board, x, y uint8) []Position {
+	return []Position{}
+}
+
+func (p dead) String() string {
+	return "X"
+}
+
+func (p dead) Threatening(b *Board, x, y uint8) []Position {
+	return []Position{}
 }

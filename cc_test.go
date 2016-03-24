@@ -5,8 +5,8 @@ import (
 )
 
 var solveTests = []struct {
-	c   int     // columns on board
-	r   int     // rows on board
+	c   uint8   // columns on board
+	r   uint8   // rows on board
 	p   []Piece // The pieces to use
 	out int     // The number of solutions
 }{
@@ -15,29 +15,24 @@ var solveTests = []struct {
 	{3, 2, []Piece{Bishop, Bishop}, 11},
 	{3, 3, []Piece{Rook, King, King}, 4},
 	{4, 4, []Piece{Rook, Rook, Knight, Knight, Knight, Knight}, 8},
+	{3, 3, []Piece{Bishop, Bishop, Bishop, Bishop, Bishop, Bishop, Bishop, Bishop, Bishop, Bishop}, 0},
 	{1, 1, []Piece{Queen}, 1},
 	{2, 2, []Piece{Queen, Queen}, 0},
 	{4, 4, []Piece{Queen, Queen, Queen, Queen}, 2},
 	{5, 5, []Piece{Queen, Queen, Queen, Queen, Queen}, 10},
 	{6, 6, []Piece{Queen, Queen, Queen, Queen, Queen, Queen}, 4},
-	{7, 7, []Piece{Queen, Queen, Queen, Queen, Queen, Queen, Queen}, 40},
-	{2, 2, []Piece{Rook, Rook, Rook}, 0},
-	{3, 3, []Piece{Bishop, Bishop, Bishop, Bishop, Bishop, Bishop, Bishop, Bishop, Bishop, Bishop}, 0},
+	//{7, 7, []Piece{Queen, Queen, Queen, Queen, Queen, Queen, Queen}, 40},
+	//{2, 2, []Piece{Rook, Rook, Rook}, 0},
 	//{8, 8, []Piece{Queen, Queen, Queen, Queen, Queen, Queen, Queen, Queen}, 92},
 	//{7, 7, []Piece{Queen, Queen, Bishop, Bishop, Knight, King, King}, 3062636},
 }
 
 func TestSolve(t *testing.T) {
 	for _, tc := range solveTests {
-		solutions := make([]Board, 0)
+		solutions := make(map[string]bool)
 		Solve(tc.c, tc.r, tc.p, &solutions)
 		if len(solutions) != tc.out {
 			t.Errorf("Expected %d got %d: %+v", tc.out, len(solutions), tc)
-			t.Errorf("Solutions:\n")
-			for i, s := range solutions {
-				t.Errorf("[%d]\n%s\n", i, s.Notation())
-				t.Errorf("[%d]\n%s\n", i, s.Ascii())
-			}
 		}
 	}
 }
@@ -46,7 +41,7 @@ func TestSolve(t *testing.T) {
 
 func Benchmark2x2R2(b *testing.B) {
 	for n := 0; n < b.N; n++ {
-		solutions := make([]Board, 0)
+		solutions := make(map[string]bool)
 		p := []Piece{Rook, Rook}
 		Solve(2, 2, p, &solutions)
 		if len(solutions) != 2 {
@@ -57,7 +52,7 @@ func Benchmark2x2R2(b *testing.B) {
 
 func Benchmark3x3R1K2(b *testing.B) {
 	for n := 0; n < b.N; n++ {
-		solutions := make([]Board, 0)
+		solutions := make(map[string]bool)
 		p := []Piece{Rook, King, King}
 		Solve(3, 3, p, &solutions)
 		if len(solutions) != 4 {
@@ -68,7 +63,7 @@ func Benchmark3x3R1K2(b *testing.B) {
 
 func Benchmark4x4R2N4(b *testing.B) {
 	for n := 0; n < b.N; n++ {
-		solutions := make([]Board, 0)
+		solutions := make(map[string]bool)
 		p := []Piece{Rook, Rook, Knight, Knight, Knight, Knight}
 		Solve(4, 4, p, &solutions)
 		if len(solutions) != 8 {
@@ -79,7 +74,7 @@ func Benchmark4x4R2N4(b *testing.B) {
 
 func Benchmark2Q(b *testing.B) {
 	for n := 0; n < b.N; n++ {
-		solutions := make([]Board, 0)
+		solutions := make(map[string]bool)
 		p := []Piece{Queen, Queen}
 		Solve(2, 2, p, &solutions)
 		if len(solutions) != 0 {
@@ -90,7 +85,7 @@ func Benchmark2Q(b *testing.B) {
 
 func Benchmark4Q(b *testing.B) {
 	for n := 0; n < b.N; n++ {
-		solutions := make([]Board, 0)
+		solutions := make(map[string]bool)
 		p := []Piece{Queen, Queen, Queen, Queen}
 		Solve(4, 4, p, &solutions)
 		if len(solutions) != 2 {
@@ -101,7 +96,7 @@ func Benchmark4Q(b *testing.B) {
 
 func Benchmark5Q(b *testing.B) {
 	for n := 0; n < b.N; n++ {
-		solutions := make([]Board, 0)
+		solutions := make(map[string]bool)
 		p := []Piece{Queen, Queen, Queen, Queen, Queen}
 		Solve(5, 5, p, &solutions)
 		if len(solutions) != 10 {
@@ -112,7 +107,7 @@ func Benchmark5Q(b *testing.B) {
 
 func Benchmark6Q(b *testing.B) {
 	for n := 0; n < b.N; n++ {
-		solutions := make([]Board, 0)
+		solutions := make(map[string]bool)
 		p := []Piece{Queen, Queen, Queen, Queen, Queen, Queen}
 		Solve(6, 6, p, &solutions)
 		if len(solutions) != 4 {
@@ -123,7 +118,7 @@ func Benchmark6Q(b *testing.B) {
 
 func Benchmark7Q(b *testing.B) {
 	for n := 0; n < b.N; n++ {
-		solutions := make([]Board, 0)
+		solutions := make(map[string]bool)
 		p := []Piece{Queen, Queen, Queen, Queen, Queen, Queen, Queen}
 		Solve(7, 7, p, &solutions)
 		if len(solutions) != 40 {
@@ -135,7 +130,7 @@ func Benchmark7Q(b *testing.B) {
 func Benchmark8Q(b *testing.B) {
 	b.Skip("Slow test")
 	for n := 0; n < b.N; n++ {
-		solutions := make([]Board, 0)
+		solutions := make(map[string]bool)
 		p := []Piece{Queen, Queen, Queen, Queen, Queen, Queen, Queen, Queen}
 		Solve(8, 8, p, &solutions)
 		if len(solutions) != 92 {
@@ -147,7 +142,7 @@ func Benchmark8Q(b *testing.B) {
 func Benchmark7x7Q2B2N1K2(b *testing.B) {
 	b.Skip("Slow test")
 	for n := 0; n < b.N; n++ {
-		solutions := make([]Board, 0)
+		solutions := make(map[string]bool)
 		p := []Piece{Queen, Queen, Bishop, Bishop, Knight, King, King}
 		Solve(7, 7, p, &solutions)
 		if len(solutions) != 3062636 {
@@ -158,7 +153,7 @@ func Benchmark7x7Q2B2N1K2(b *testing.B) {
 
 func Benchmark3x3B10(b *testing.B) {
 	for n := 0; n < b.N; n++ {
-		solutions := make([]Board, 0)
+		solutions := make(map[string]bool)
 		p := []Piece{Bishop, Bishop, Bishop, Bishop, Bishop, Bishop, Bishop, Bishop, Bishop, Bishop}
 		Solve(3, 3, p, &solutions)
 		if len(solutions) != 0 {

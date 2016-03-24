@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/alexflint/go-arg"
+	"github.com/pkg/profile"
 	"github.com/walle/cc"
 )
 
@@ -19,6 +20,9 @@ var args struct {
 }
 
 func main() {
+	defer profile.Start(profile.CPUProfile, profile.ProfilePath(".")).Stop()
+	//defer profile.Start(profile.BlockProfile, profile.ProfilePath(".")).Stop()
+	//defer profile.Start(profile.MemProfile, profile.ProfilePath(".")).Stop()
 	arg.MustParse(&args)
 	start := time.Now()
 
@@ -40,12 +44,12 @@ func main() {
 		pieces = append(pieces, cc.King)
 	}
 
-	solutions := make([]cc.Board, 0)
-	cc.Solve(args.Columns, args.Rows, pieces, &solutions)
+	solutions := make(map[string]bool)
+	cc.Solve(uint8(args.Columns), uint8(args.Rows), pieces, &solutions)
 
 	combs := ""
-	for _, s := range solutions {
-		combs += s.Notation() + "; "
+	for k := range solutions {
+		combs += k + "; "
 	}
 
 	fmt.Printf("[%d] %s(%s)\n", len(solutions), combs, time.Now().Sub(start))
