@@ -47,7 +47,7 @@ func (b Board) Notation() string {
 			ret += fmt.Sprintf("%s%s%d,", cc, string(97+i), j+1)
 		}
 	}
-	return ret
+	return ret[0 : len(ret)-1]
 }
 
 // Ascii returns the board configuration as an ascii drawing
