@@ -77,7 +77,7 @@ Example usage
 
 ```shell
 $ cc -c 3 -r 3 -k 2 -t 1
-[4] ♚a3, ♚c3, ♜b1; ♚a1, ♚a3, ♜c2; ♚c1, ♚c3, ♜a2; ♚a1, ♚c1, ♜b3; (64.127µs)
+[4] Rb1,Ka3,Kc3; Kc1,Ra2,Kc3; Ka1,Rc2,Ka3; Ka1,Kc1,Rb3; (110.17µs)
 ```
 
 ## Testing
