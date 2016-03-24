@@ -14,18 +14,21 @@ type Board struct {
 // empty cells.
 func NewBoard(columns, rows uint8) Board {
 	c := make([][]Cell, rows)
+
 	for j := uint8(0); j < rows; j++ {
 		c[j] = make([]Cell, columns)
 		for i := uint8(0); i < columns; i++ {
 			c[j][i] = Cell(Blank)
 		}
 	}
+
 	return Board{columns: columns, rows: rows, cells: c}
 }
 
 // Notation returns the board configuration using common notation.
 func (b Board) Notation() string {
 	ret := ""
+
 	for j := uint8(0); j < b.rows; j++ {
 		for i := uint8(0); i < b.columns; i++ {
 			var cc Piece
@@ -44,9 +47,11 @@ func (b Board) Notation() string {
 			case Cell(Knight):
 				cc = Knight
 			}
+
 			ret += fmt.Sprintf("%s%s%d,", cc, string(97+i), j+1)
 		}
 	}
+
 	return ret[0 : len(ret)-1]
 }
 
@@ -55,6 +60,7 @@ func (b Board) Notation() string {
 // by their individual symbol.
 func (b Board) Ascii() string {
 	ret := ""
+
 	for j := uint8(0); j < b.rows; j++ {
 		for i := uint8(0); i < b.columns; i++ {
 			c := b.cells[j][i]
@@ -75,10 +81,12 @@ func (b Board) Ascii() string {
 			case Cell(Knight):
 				cc = Knight
 			}
+
 			ret += fmt.Sprintf(" %s", cc)
 		}
+
 		ret += "\n"
 	}
-	ret += "\n"
+
 	return ret
 }

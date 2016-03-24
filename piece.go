@@ -111,18 +111,6 @@ func (p queen) Threatening(b *Board, x, y uint8) []Position {
 	if x < 0 || y < 0 || x >= b.columns || y >= b.rows {
 		return []Position{}
 	}
-	/*ret := make([]Position, 0)
-	for i := uint8(0); i < b.columns; i++ {
-		for j := uint8(0); j < b.rows; j++ {
-			if i == x || j == y || math.Abs(float64(j-y)) == math.Abs(float64(i-x)) {
-				if i == x && j == y {
-					continue
-				}
-				ret = append(ret, Position{x: i, y: j})
-			}
-		}
-	}
-	return ret*/
 
 	ret := make([]Position, 0, b.columns*b.rows)
 	ret = append(ret, Rook.Threatening(b, x, y)...)

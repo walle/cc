@@ -7,7 +7,6 @@ func Solve(columns, rows uint8, pieces []Piece, solutions *map[string]bool) {
 
 	// No possible solutions
 	if np != 1 && np >= int(columns*rows) {
-		//*solutions = []*Board{}
 		return
 	}
 
@@ -20,9 +19,7 @@ func Solve(columns, rows uint8, pieces []Piece, solutions *map[string]bool) {
 // is found.
 func place(board Board, pieces []Piece, solutions *map[string]bool) {
 	if len(pieces) == 0 {
-		//*solutions = append(*solutions, &board)
 		(*solutions)[board.Notation()] = true
-		//fmt.Printf("Found solution %s\n", board.Notation())
 		return
 	}
 
@@ -35,6 +32,8 @@ func place(board Board, pieces []Piece, solutions *map[string]bool) {
 			if c == Cell(Dead) || c != Cell(Blank) {
 				continue
 			}
+
+			// Check so we don't threaten a placed piece
 			canPlace := true
 			tr := p.Threatening(&board, i, j)
 			for _, t := range tr {
@@ -43,12 +42,20 @@ func place(board Board, pieces []Piece, solutions *map[string]bool) {
 					canPlace = false
 				}
 			}
+
 			if canPlace {
-				b2 := Board{columns: board.columns, rows: board.rows, cells: make([][]Cell, len(board.cells))}
+
+				// Create a copy of the current board to use when reqursing down
+				b2 := Board{
+					columns: board.columns,
+					rows:    board.rows,
+					cells:   make([][]Cell, len(board.cells)),
+				}
 				for r := uint8(0); r < board.rows; r++ {
 					b2.cells[r] = make([]Cell, len(board.cells[r]))
 					copy(b2.cells[r], board.cells[r])
 				}
+
 				cc := Cell(0)
 				switch p {
 				case King:
@@ -62,10 +69,14 @@ func place(board Board, pieces []Piece, solutions *map[string]bool) {
 				case Knight:
 					cc = Cell(Knight)
 				}
-				b2.cells[j][i] = cc
+				b2.cells[j][i] = cc // Place the piece
+
+				// Mark all dead cells
 				for _, t := range tr {
 					b2.cells[t.y][t.x] = Cell(Dead)
 				}
+
+				// Recurse down with new board
 				place(b2, pieces, solutions)
 			}
 		}

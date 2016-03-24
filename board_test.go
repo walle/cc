@@ -6,17 +6,20 @@ import (
 
 func TestAscii(t *testing.T) {
 	b := NewBoard(3, 3)
-	expected := " . . .\n . . .\n . . .\n\n"
+
+	expected := " . . .\n . . .\n . . .\n"
 	if b.Ascii() != expected {
 		t.Errorf("Expected %s got %s", expected, b.Ascii())
 	}
-	expected = " R . .\n . R .\n . . .\n\n"
+
+	expected = " R . .\n . R .\n . . .\n"
 	b.cells[0][0] = Cell(Rook)
 	b.cells[1][1] = Cell(Rook)
 	if b.Ascii() != expected {
 		t.Errorf("Expected %s got %s", expected, b.Ascii())
 	}
-	expected = " R X K\n X R Q\n N B .\n\n"
+
+	expected = " R X K\n X R Q\n N B .\n"
 	b.cells[0][0] = Cell(Rook)
 	b.cells[0][1] = Cell(Dead)
 	b.cells[0][2] = Cell(King)
