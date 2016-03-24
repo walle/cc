@@ -5,7 +5,6 @@ import (
 	"time"
 
 	"github.com/alexflint/go-arg"
-	"github.com/pkg/profile"
 	"github.com/walle/cc"
 )
 
@@ -20,9 +19,6 @@ var args struct {
 }
 
 func main() {
-	defer profile.Start(profile.CPUProfile, profile.ProfilePath(".")).Stop()
-	//defer profile.Start(profile.BlockProfile, profile.ProfilePath(".")).Stop()
-	//defer profile.Start(profile.MemProfile, profile.ProfilePath(".")).Stop()
 	arg.MustParse(&args)
 	start := time.Now()
 
