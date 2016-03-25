@@ -141,6 +141,24 @@ $ go test -cover ./...
 $ go test -bench=. -benchmem ./...
 ```
 
+## Benchmarks
+
+The images are generated using gobenchui https://github.com/divan/gobenchui
+
+### Time benchmark
+
+[![Time benchmark](https://raw.githubusercontent.com/walle/cc/master/_doc/time-bench.png)](https://raw.githubusercontent.com/walle/cc/master/_doc/time-bench.png)
+
+### Memory benchmark
+
+[![Memory benchmark](https://raw.githubusercontent.com/walle/cc/master/_doc/mem-bench.png)](https://raw.githubusercontent.com/walle/cc/master/_doc/mem-bench.png)
+
+Basically three events stand out.
+
+* First naive solution, which uses a lot of memory and takes a lot of time.
+* Changing data structure, time goes up a little but memory usage goes.
+* Using channels to run in parallell makes the time go down.
+
 ## License
 
 The code is under the MIT license. See [LICENSE](LICENSE) for more
