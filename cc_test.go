@@ -24,6 +24,8 @@ var solveTests = []struct {
 	{6, 6, []Piece{Queen, Queen, Queen, Queen, Queen, Queen}, 4},
 	{7, 7, []Piece{Queen, Queen, Queen, Queen, Queen, Queen, Queen}, 40},
 	{2, 2, []Piece{Rook, Rook, Rook}, 0},
+	{5, 5, []Piece{Queen, Queen, Bishop, Bishop, Knight, King, King}, 8},
+	{6, 6, []Piece{Queen, Queen, Bishop, Bishop, Knight, King, King}, 23752},
 	//{8, 8, []Piece{Queen, Queen, Queen, Queen, Queen, Queen, Queen, Queen}, 92},
 	//{7, 7, []Piece{Queen, Queen, Bishop, Bishop, Knight, King, King}, 3062636},
 }
@@ -126,6 +128,26 @@ func Benchmark8Q(b *testing.B) {
 		solutions := Solve(8, 8, p)
 		if len(solutions) != 92 {
 			b.Errorf("Expected %d got %d", 92, len(solutions))
+		}
+	}
+}
+
+func Benchmark5x5Q2B2N1K2(b *testing.B) {
+	for n := 0; n < b.N; n++ {
+		p := []Piece{Queen, Queen, Bishop, Bishop, Knight, King, King}
+		solutions := Solve(5, 5, p)
+		if len(solutions) != 8 {
+			b.Errorf("Expected %d got %d", 8, len(solutions))
+		}
+	}
+}
+
+func Benchmark6x6Q2B2N1K2(b *testing.B) {
+	for n := 0; n < b.N; n++ {
+		p := []Piece{Queen, Queen, Bishop, Bishop, Knight, King, King}
+		solutions := Solve(6, 6, p)
+		if len(solutions) != 23752 {
+			b.Errorf("Expected %d got %d", 8, len(solutions))
 		}
 	}
 }
