@@ -46,4 +46,12 @@ func TestNewBoardFromString(t *testing.T) {
 	if err == nil {
 		t.Errorf("Error did not occur")
 	}
+	notation = "Rb1,Ra2"
+	b, err = NewBoardFromString(2, 2, notation)
+	if err != nil {
+		t.Errorf("Error occured: %s", err)
+	}
+	if b.Notation() != notation {
+		t.Errorf("Expected %s got %s", notation, b.Notation())
+	}
 }

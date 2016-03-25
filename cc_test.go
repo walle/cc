@@ -12,6 +12,7 @@ var solveTests = []struct {
 }{
 	{2, 2, []Piece{Rook, Rook}, 2},
 	{2, 2, []Piece{King, King}, 0},
+	{2, 2, []Piece{Knight, Knight}, 6},
 	{3, 2, []Piece{Bishop, Bishop}, 11},
 	{3, 3, []Piece{Rook, King, King}, 4},
 	{4, 4, []Piece{Rook, Rook, Knight, Knight, Knight, Knight}, 8},
