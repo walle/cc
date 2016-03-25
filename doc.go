@@ -1,2 +1,2 @@
-// Package cc contains methods for solving Chess Challange
+// Package cc contains methods for solving Chess Challenge
 package cc
