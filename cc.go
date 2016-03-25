@@ -6,12 +6,13 @@ import (
 
 // Solve populates solutions with valid boards of the dimensions columns*rows
 // with valid configurations for pieces.
-func Solve(columns, rows uint8, pieces []Piece, solutions *map[string]bool) {
+// Returns a map with all solutions as key, in common notation.
+func Solve(columns, rows uint8, pieces []Piece) map[string]bool {
 	np := len(pieces)
 
 	// No possible solutions
 	if np != 1 && np >= int(columns*rows) {
-		return
+		return make(map[string]bool)
 	}
 
 	wg := &sync.WaitGroup{}
@@ -59,14 +60,17 @@ func Solve(columns, rows uint8, pieces []Piece, solutions *map[string]bool) {
 
 	// Syncronize the read from the channel so we dont exit to fast
 	done := make(chan bool, 1)
+	solutions := make(map[string]bool)
 	go func(ch <-chan string, done chan<- bool) {
 		for s := range ch {
-			(*solutions)[s] = true
+			solutions[s] = true
 		}
 		done <- true
 	}(ch, done)
 
 	<-done
+
+	return solutions
 }
 
 // place tries to place the next piece on the board and recurse down

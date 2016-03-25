@@ -30,8 +30,7 @@ var solveTests = []struct {
 
 func TestSolve(t *testing.T) {
 	for _, tc := range solveTests {
-		solutions := make(map[string]bool)
-		Solve(tc.c, tc.r, tc.p, &solutions)
+		solutions := Solve(tc.c, tc.r, tc.p)
 		if len(solutions) != tc.out {
 			t.Errorf("Expected %d got %d: %+v", tc.out, len(solutions), tc)
 		}
@@ -42,9 +41,8 @@ func TestSolve(t *testing.T) {
 
 func Benchmark2x2R2(b *testing.B) {
 	for n := 0; n < b.N; n++ {
-		solutions := make(map[string]bool)
 		p := []Piece{Rook, Rook}
-		Solve(2, 2, p, &solutions)
+		solutions := Solve(2, 2, p)
 		if len(solutions) != 2 {
 			b.Errorf("Expected %d got %d", 2, len(solutions))
 		}
@@ -53,9 +51,8 @@ func Benchmark2x2R2(b *testing.B) {
 
 func Benchmark3x3R1K2(b *testing.B) {
 	for n := 0; n < b.N; n++ {
-		solutions := make(map[string]bool)
 		p := []Piece{Rook, King, King}
-		Solve(3, 3, p, &solutions)
+		solutions := Solve(3, 3, p)
 		if len(solutions) != 4 {
 			b.Errorf("Expected %d got %d", 4, len(solutions))
 		}
@@ -64,9 +61,8 @@ func Benchmark3x3R1K2(b *testing.B) {
 
 func Benchmark4x4R2N4(b *testing.B) {
 	for n := 0; n < b.N; n++ {
-		solutions := make(map[string]bool)
 		p := []Piece{Rook, Rook, Knight, Knight, Knight, Knight}
-		Solve(4, 4, p, &solutions)
+		solutions := Solve(4, 4, p)
 		if len(solutions) != 8 {
 			b.Errorf("Expected %d got %d", 8, len(solutions))
 		}
@@ -75,9 +71,8 @@ func Benchmark4x4R2N4(b *testing.B) {
 
 func Benchmark2Q(b *testing.B) {
 	for n := 0; n < b.N; n++ {
-		solutions := make(map[string]bool)
 		p := []Piece{Queen, Queen}
-		Solve(2, 2, p, &solutions)
+		solutions := Solve(2, 2, p)
 		if len(solutions) != 0 {
 			b.Errorf("Expected %d got %d", 0, len(solutions))
 		}
@@ -86,9 +81,8 @@ func Benchmark2Q(b *testing.B) {
 
 func Benchmark4Q(b *testing.B) {
 	for n := 0; n < b.N; n++ {
-		solutions := make(map[string]bool)
 		p := []Piece{Queen, Queen, Queen, Queen}
-		Solve(4, 4, p, &solutions)
+		solutions := Solve(4, 4, p)
 		if len(solutions) != 2 {
 			b.Errorf("Expected %d got %d", 2, len(solutions))
 		}
@@ -97,9 +91,8 @@ func Benchmark4Q(b *testing.B) {
 
 func Benchmark5Q(b *testing.B) {
 	for n := 0; n < b.N; n++ {
-		solutions := make(map[string]bool)
 		p := []Piece{Queen, Queen, Queen, Queen, Queen}
-		Solve(5, 5, p, &solutions)
+		solutions := Solve(5, 5, p)
 		if len(solutions) != 10 {
 			b.Errorf("Expected %d got %d", 10, len(solutions))
 		}
@@ -108,9 +101,8 @@ func Benchmark5Q(b *testing.B) {
 
 func Benchmark6Q(b *testing.B) {
 	for n := 0; n < b.N; n++ {
-		solutions := make(map[string]bool)
 		p := []Piece{Queen, Queen, Queen, Queen, Queen, Queen}
-		Solve(6, 6, p, &solutions)
+		solutions := Solve(6, 6, p)
 		if len(solutions) != 4 {
 			b.Errorf("Expected %d got %d", 4, len(solutions))
 		}
@@ -119,9 +111,8 @@ func Benchmark6Q(b *testing.B) {
 
 func Benchmark7Q(b *testing.B) {
 	for n := 0; n < b.N; n++ {
-		solutions := make(map[string]bool)
 		p := []Piece{Queen, Queen, Queen, Queen, Queen, Queen, Queen}
-		Solve(7, 7, p, &solutions)
+		solutions := Solve(7, 7, p)
 		if len(solutions) != 40 {
 			b.Errorf("Expected %d got %d", 40, len(solutions))
 		}
@@ -131,9 +122,8 @@ func Benchmark7Q(b *testing.B) {
 func Benchmark8Q(b *testing.B) {
 	b.Skip("Slow test")
 	for n := 0; n < b.N; n++ {
-		solutions := make(map[string]bool)
 		p := []Piece{Queen, Queen, Queen, Queen, Queen, Queen, Queen, Queen}
-		Solve(8, 8, p, &solutions)
+		solutions := Solve(8, 8, p)
 		if len(solutions) != 92 {
 			b.Errorf("Expected %d got %d", 92, len(solutions))
 		}
@@ -143,9 +133,8 @@ func Benchmark8Q(b *testing.B) {
 func Benchmark7x7Q2B2N1K2(b *testing.B) {
 	b.Skip("Slow test")
 	for n := 0; n < b.N; n++ {
-		solutions := make(map[string]bool)
 		p := []Piece{Queen, Queen, Bishop, Bishop, Knight, King, King}
-		Solve(7, 7, p, &solutions)
+		solutions := Solve(7, 7, p)
 		if len(solutions) != 3062636 {
 			b.Errorf("Expected %d got %d", 3062636, len(solutions))
 		}
@@ -154,9 +143,8 @@ func Benchmark7x7Q2B2N1K2(b *testing.B) {
 
 func Benchmark3x3B10(b *testing.B) {
 	for n := 0; n < b.N; n++ {
-		solutions := make(map[string]bool)
 		p := []Piece{Bishop, Bishop, Bishop, Bishop, Bishop, Bishop, Bishop, Bishop, Bishop, Bishop}
-		Solve(3, 3, p, &solutions)
+		solutions := Solve(3, 3, p)
 		if len(solutions) != 0 {
 			b.Errorf("Expected %d got %d", 0, len(solutions))
 		}

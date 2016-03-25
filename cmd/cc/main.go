@@ -59,8 +59,7 @@ func main() {
 		pieces = append(pieces, cc.King)
 	}
 
-	solutions := make(map[string]bool)
-	cc.Solve(uint8(args.Columns), uint8(args.Rows), pieces, &solutions)
+	solutions := cc.Solve(uint8(args.Columns), uint8(args.Rows), pieces)
 
 	if args.ASCII {
 		// Output the configurations as ascii
