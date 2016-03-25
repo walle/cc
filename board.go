@@ -11,18 +11,18 @@ import (
 type Board struct {
 	columns uint8
 	rows    uint8
-	cells   [][]Cell
+	cells   [][]cell
 }
 
 // NewBoard creates a new board of dimensions (columns*rows) with only
 // empty cells.
 func NewBoard(columns, rows uint8) Board {
-	c := make([][]Cell, rows)
+	c := make([][]cell, rows)
 
 	for j := uint8(0); j < rows; j++ {
-		c[j] = make([]Cell, columns)
+		c[j] = make([]cell, columns)
 		for i := uint8(0); i < columns; i++ {
-			c[j][i] = Cell(Blank)
+			c[j][i] = cell(Blank)
 		}
 	}
 
@@ -39,18 +39,18 @@ func NewBoardFromString(columns, rows uint8, notation string) (Board, error) {
 		xs := p[1]
 		ys := p[2]
 
-		var cc Cell
+		var cc cell
 		switch v {
 		case "K":
-			cc = Cell(King)
+			cc = cell(King)
 		case "R":
-			cc = Cell(Rook)
+			cc = cell(Rook)
 		case "Q":
-			cc = Cell(Queen)
+			cc = cell(Queen)
 		case "B":
-			cc = Cell(Bishop)
+			cc = cell(Bishop)
 		case "N":
-			cc = Cell(Knight)
+			cc = cell(Knight)
 		}
 
 		x := uint8(int(xs) - 97)
@@ -77,17 +77,17 @@ func (b Board) Notation() string {
 			var cc Piece
 			c := b.cells[j][i]
 			switch c {
-			case Cell(Blank), Cell(Dead):
+			case cell(Blank), cell(Dead):
 				continue
-			case Cell(King):
+			case cell(King):
 				cc = King
-			case Cell(Rook):
+			case cell(Rook):
 				cc = Rook
-			case Cell(Queen):
+			case cell(Queen):
 				cc = Queen
-			case Cell(Bishop):
+			case cell(Bishop):
 				cc = Bishop
-			case Cell(Knight):
+			case cell(Knight):
 				cc = Knight
 			}
 
@@ -109,19 +109,19 @@ func (b Board) ASCII() string {
 			c := b.cells[j][i]
 			var cc Piece
 			switch c {
-			case Cell(Blank):
+			case cell(Blank):
 				cc = Blank
-			case Cell(Dead):
+			case cell(Dead):
 				cc = Dead
-			case Cell(King):
+			case cell(King):
 				cc = King
-			case Cell(Rook):
+			case cell(Rook):
 				cc = Rook
-			case Cell(Queen):
+			case cell(Queen):
 				cc = Queen
-			case Cell(Bishop):
+			case cell(Bishop):
 				cc = Bishop
-			case Cell(Knight):
+			case cell(Knight):
 				cc = Knight
 			}
 

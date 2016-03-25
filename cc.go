@@ -25,25 +25,25 @@ func Solve(columns, rows uint8, pieces []Piece, solutions *map[string]bool) {
 				b := NewBoard(columns, rows)
 				// Shift the pieces to get the first
 				p, pieces := pieces[0], pieces[1:]
-				cc := Cell(0)
+				cc := cell(0)
 				switch p {
 				case King:
-					cc = Cell(King)
+					cc = cell(King)
 				case Rook:
-					cc = Cell(Rook)
+					cc = cell(Rook)
 				case Queen:
-					cc = Cell(Queen)
+					cc = cell(Queen)
 				case Bishop:
-					cc = Cell(Bishop)
+					cc = cell(Bishop)
 				case Knight:
-					cc = Cell(Knight)
+					cc = cell(Knight)
 				}
 				b.cells[j][i] = cc // Place the piece
 
 				// Mark all dead cells
 				tr := p.Threatening(&b, i, j)
 				for _, t := range tr {
-					b.cells[t.y][t.x] = Cell(Dead)
+					b.cells[t.y][t.x] = cell(Dead)
 				}
 				place(b, pieces, ch)
 				wg.Done()
@@ -85,7 +85,7 @@ func place(board Board, pieces []Piece, ch chan<- string) {
 	for j := uint8(0); j < board.rows; j++ {
 		for i := uint8(0); i < board.columns; i++ {
 			c := board.cells[j][i]
-			if c == Cell(Dead) || c != Cell(Blank) {
+			if c == cell(Dead) || c != cell(Blank) {
 				continue
 			}
 
@@ -94,7 +94,7 @@ func place(board Board, pieces []Piece, ch chan<- string) {
 			tr := p.Threatening(&board, i, j)
 			for _, t := range tr {
 				tc := board.cells[t.y][t.x]
-				if tc > Cell(Dead) {
+				if tc > cell(Dead) {
 					canPlace = false
 				}
 			}
@@ -105,31 +105,31 @@ func place(board Board, pieces []Piece, ch chan<- string) {
 				b2 := Board{
 					columns: board.columns,
 					rows:    board.rows,
-					cells:   make([][]Cell, len(board.cells)),
+					cells:   make([][]cell, len(board.cells)),
 				}
 				for r := uint8(0); r < board.rows; r++ {
-					b2.cells[r] = make([]Cell, len(board.cells[r]))
+					b2.cells[r] = make([]cell, len(board.cells[r]))
 					copy(b2.cells[r], board.cells[r])
 				}
 
-				cc := Cell(0)
+				cc := cell(0)
 				switch p {
 				case King:
-					cc = Cell(King)
+					cc = cell(King)
 				case Rook:
-					cc = Cell(Rook)
+					cc = cell(Rook)
 				case Queen:
-					cc = Cell(Queen)
+					cc = cell(Queen)
 				case Bishop:
-					cc = Cell(Bishop)
+					cc = cell(Bishop)
 				case Knight:
-					cc = Cell(Knight)
+					cc = cell(Knight)
 				}
 				b2.cells[j][i] = cc // Place the piece
 
 				// Mark all dead cells
 				for _, t := range tr {
-					b2.cells[t.y][t.x] = Cell(Dead)
+					b2.cells[t.y][t.x] = cell(Dead)
 				}
 
 				// Recurse down with new board
