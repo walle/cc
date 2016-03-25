@@ -78,7 +78,6 @@ func Solve(columns, rows uint8, pieces []Piece) map[string]bool {
 // is found.
 func place(board Board, pieces []Piece, ch chan<- string) {
 	if len(pieces) == 0 {
-		//(*solutions)[board.Notation()] = true
 		ch <- board.Notation()
 		return
 	}
