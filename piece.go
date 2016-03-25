@@ -33,7 +33,7 @@ func (p rook) Threatening(b *Board, x, y uint8) []Position {
 	if x < 0 || y < 0 || x >= b.columns || y >= b.rows {
 		return []Position{}
 	}
-	ret := make([]Position, 0)
+	var ret []Position
 	for i := uint8(0); i < b.columns; i++ {
 		for j := uint8(0); j < b.rows; j++ {
 			if i == x && j != y {
@@ -65,7 +65,7 @@ func (p king) Threatening(b *Board, x, y uint8) []Position {
 		{x: x, y: y + 1},
 		{x: x - 1, y: y + 1},
 	}
-	ret := make([]Position, 0)
+	var ret []Position
 	for _, c := range t {
 		if c.x < 0 || c.y < 0 || c.x >= b.columns || c.y >= b.rows {
 			continue
@@ -93,7 +93,7 @@ func (p knight) Threatening(b *Board, x, y uint8) []Position {
 		{x: x - 1, y: y + 2},
 		{x: x + 1, y: y + 2},
 	}
-	ret := make([]Position, 0)
+	var ret []Position
 	for _, c := range t {
 		if c.x < 0 || c.y < 0 || c.x >= b.columns || c.y >= b.rows {
 			continue
