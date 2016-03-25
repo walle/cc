@@ -53,13 +53,13 @@ $ go get github.com/walle/cc/...
 
 ```shell
 usage: cc --columns COLUMNS --rows ROWS [--kings KINGS] [--queens QUEENS]
-[--bishops BISHOPS] [--rooks ROOKS] [--knights KNIGHTS]
+[--bishops BISHOPS] [--rooks ROOKS] [--knights KNIGHTS] [--notation NOTATION]
+[--ascii]
 
 options:
   --columns COLUMNS, -c COLUMNS
                          the number of columns to use on the board
-  --rows ROWS, -r ROWS
-                         the number of rows to use on the board
+  --rows ROWS, -r ROWS   the number of rows to use on the board
   --kings KINGS, -k KINGS
                          the number of kings to use on the board
   --queens QUEENS, -q QUEENS
@@ -68,8 +68,10 @@ options:
                          the number of bishops to use on the board
   --rooks ROOKS, -t ROOKS
                          the number of rooks to use on the board
-  --knights KNGHTS, -n KNIGHTS
+  --knights KNIGHTS, -n KNIGHTS
                          the number of knights to use on the board
+  --notation NOTATION    convert notation to visualize a board as ascii
+  --ascii                visualize in ascii instead of notation
   --help, -h             display this help and exit
 ```
 
@@ -78,6 +80,44 @@ Example usage
 ```shell
 $ cc -c 3 -r 3 -k 2 -t 1
 [4] Rb1,Ka3,Kc3; Kc1,Ra2,Kc3; Ka1,Rc2,Ka3; Ka1,Kc1,Rb3; (110.17µs)
+```
+
+```
+$ cc -c 3 -r 3 -k 2 -t 1 --ascii
+[4]
+
+1
+ . R .
+ . . .
+ K . K
+
+2
+ . . K
+ R . .
+ . . K
+
+3
+ K . K
+ . . .
+ . R .
+
+4
+ K . .
+ . . R
+ K . .
+
+(348.274µs)
+```
+
+```
+$ cc -c 7 -r 7 --notation Kb2,Ke2,Qg3,Na6,Bb6,Bc6,Qf7
+ . . . . . . .
+ . K . . K . .
+ . . . . . . Q
+ . . . . . . .
+ . . . . . . .
+ N B B . . . .
+ . . . . . Q .
 ```
 
 ## Testing

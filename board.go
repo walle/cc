@@ -1,6 +1,10 @@
 package cc
 
-import "fmt"
+import (
+	"fmt"
+	"strconv"
+	"strings"
+)
 
 // Board represents a chess board. It contains columns*rows cells that can be
 // occupied by pieces.
@@ -23,6 +27,45 @@ func NewBoard(columns, rows uint8) Board {
 	}
 
 	return Board{columns: columns, rows: rows, cells: c}
+}
+
+// NewBoardFromString takes a notation and converts it to a board.
+// Returns the board on success and an error if something goes wrong.
+func NewBoardFromString(columns, rows uint8, notation string) (Board, error) {
+	b := NewBoard(columns, rows)
+	ps := strings.Split(notation, ",")
+	for _, p := range ps {
+		v := string(p[0])
+		xs := p[1]
+		ys := p[2]
+
+		var cc Cell
+		switch v {
+		case "K":
+			cc = Cell(King)
+		case "R":
+			cc = Cell(Rook)
+		case "Q":
+			cc = Cell(Queen)
+		case "B":
+			cc = Cell(Bishop)
+		case "N":
+			cc = Cell(Knight)
+		}
+
+		x := uint8(int(xs) - 97)
+		yi, _ := strconv.Atoi(string(ys))
+		y := uint8(yi - 1)
+		if x >= columns || y >= rows {
+			return b, fmt.Errorf(
+				"cc: piece at %d, %d can't fit on board (%d,%d)",
+				x, y, columns-1, rows-1,
+			)
+		}
+
+		b.cells[y][x] = cc
+	}
+	return b, nil
 }
 
 // Notation returns the board configuration using common notation.
