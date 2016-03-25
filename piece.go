@@ -1,7 +1,5 @@
 package cc
 
-import "fmt"
-
 // Piece is the interface used to be able to use different implementation details
 // for the different kinds of pieces.
 type Piece interface {
@@ -126,66 +124,28 @@ func (p bishop) Threatening(b *Board, x, y uint8) []position {
 	if x < 0 || y < 0 || x >= b.columns || y >= b.rows {
 		return []position{}
 	}
-	m := make(map[string]position)
-	i := x
-	j := y
-	for {
-		if i < 0 || i >= b.columns {
-			break
-		}
-		if j < 0 || j >= b.rows {
-			break
-		}
-		i++
-		j++
-		m[fmt.Sprintf("%d,%d", i, j)] = position{x: i, y: j}
+	n := b.columns
+	if b.rows > n {
+		n = b.rows
 	}
-	i = x
-	j = y
-	for {
-		if i < 0 || i >= b.columns {
-			break
+	var ret []position
+	for step := 1; step < int(n); step++ {
+		x1 := uint8(int(x) + (step * -1))
+		y1 := uint8(int(y) + (step * -1))
+		x2 := uint8(int(x) + (step * 1))
+		y2 := uint8(int(y) + (step * 1))
+		if x1 < b.columns && y1 < b.rows {
+			ret = append(ret, position{x: x1, y: y1})
 		}
-		if j < 0 || j >= b.rows {
-			break
+		if x2 < b.columns && y2 < b.rows {
+			ret = append(ret, position{x: x2, y: y2})
 		}
-		i++
-		j--
-		m[fmt.Sprintf("%d,%d", i, j)] = position{x: i, y: j}
-	}
-	i = x
-	j = y
-	for {
-		if i < 0 || i >= b.columns {
-			break
+		if x1 < b.columns && y2 < b.rows {
+			ret = append(ret, position{x: x1, y: y2})
 		}
-		if j < 0 || j >= b.rows {
-			break
+		if x2 < b.columns && y1 < b.rows {
+			ret = append(ret, position{x: x2, y: y1})
 		}
-		i--
-		j--
-		m[fmt.Sprintf("%d,%d", i, j)] = position{x: i, y: j}
-	}
-	i = x
-	j = y
-	for {
-		if i < 0 || i >= b.columns {
-			break
-		}
-		if j < 0 || j >= b.rows {
-			break
-		}
-		i--
-		j++
-		m[fmt.Sprintf("%d,%d", i, j)] = position{x: i, y: j}
-	}
-
-	ret := make([]position, 0, b.columns*b.rows)
-	for _, c := range m {
-		if c.x < 0 || c.y < 0 || c.x >= b.columns || c.y >= b.rows {
-			continue
-		}
-		ret = append(ret, c)
 	}
 	return ret
 }
