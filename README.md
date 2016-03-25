@@ -156,7 +156,7 @@ The images are generated using gobenchui https://github.com/divan/gobenchui
 Basically three events stand out.
 
 * First naive solution, which uses a lot of memory and takes a lot of time.
-* Changing data structure, time goes up a little but memory usage goes.
+* Changing data structure, time goes up a little but memory usage goes down.
 * Using channels to run in parallell makes the time go down.
 
 ## License
