@@ -98,10 +98,10 @@ func (b Board) Notation() string {
 	return ret[0 : len(ret)-1]
 }
 
-// Ascii returns the board configuration as an ascii drawing
+// ASCII returns the board configuration as an ascii drawing
 // dot (.) marks empty cells, X marks dead cells, and pieces are represented
 // by their individual symbol.
-func (b Board) Ascii() string {
+func (b Board) ASCII() string {
 	ret := ""
 
 	for j := uint8(0); j < b.rows; j++ {

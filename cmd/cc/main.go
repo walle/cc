@@ -18,7 +18,7 @@ var args struct {
 	Rooks    int    `arg:"-t,help:the number of rooks to use on the board"`
 	Knights  int    `arg:"-n,help:the number of knights to use on the board"`
 	Notation string `arg:"help:convert notation to visualize a board as ascii"`
-	Ascii    bool   `arg:"help:visualize in ascii instead of notation"`
+	ASCII    bool   `arg:"help:visualize in ascii instead of notation"`
 }
 
 func main() {
@@ -33,7 +33,7 @@ func main() {
 				"Could not convert notation (%s) to board: %s", args.Notation, err)
 			return
 		}
-		fmt.Println(b.Ascii())
+		fmt.Println(b.ASCII())
 		return
 		// Exit main
 	}
@@ -62,7 +62,7 @@ func main() {
 	solutions := make(map[string]bool)
 	cc.Solve(uint8(args.Columns), uint8(args.Rows), pieces, &solutions)
 
-	if args.Ascii {
+	if args.ASCII {
 		// Output the configurations as ascii
 		fmt.Printf("[%d]\n\n", len(solutions))
 		i := 1
@@ -71,7 +71,7 @@ func main() {
 			i++
 			b, err := cc.NewBoardFromString(uint8(args.Columns), uint8(args.Rows), k)
 			if err == nil {
-				fmt.Println(b.Ascii())
+				fmt.Println(b.ASCII())
 			}
 		}
 		fmt.Printf("(%s)\n", time.Now().Sub(start))
