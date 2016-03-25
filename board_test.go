@@ -32,3 +32,18 @@ func TestAscii(t *testing.T) {
 		t.Errorf("Expected %s got %s", expected, b.ASCII())
 	}
 }
+
+func TestNewBoardFromString(t *testing.T) {
+	notation := "Kb2,Ke2,Qg3,Na6,Bb6,Bc6,Qf7"
+	b, err := NewBoardFromString(7, 7, notation)
+	if err != nil {
+		t.Errorf("Error occured: %s", err)
+	}
+	if b.Notation() != notation {
+		t.Errorf("Expected %s got %s", notation, b.Notation())
+	}
+	b, err = NewBoardFromString(2, 2, notation)
+	if err == nil {
+		t.Errorf("Error did not occur")
+	}
+}
