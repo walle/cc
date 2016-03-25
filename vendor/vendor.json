@@ -1,0 +1,11 @@
+{
+	"comment": "",
+	"ignore": "test",
+	"package": [
+		{
+			"path": "github.com/alexflint/go-arg",
+			"revision": "ef4850b5a6115364106ceec88a659dcf17ccaec0",
+			"revisionTime": "2016-03-06T22:21:54+01:00"
+		}
+	]
+}
