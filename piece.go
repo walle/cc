@@ -56,14 +56,14 @@ func (p king) Threatening(b *Board, x, y uint8) []Position {
 		return []Position{}
 	}
 	t := []Position{
-		Position{x: x - 1, y: y},
-		Position{x: x - 1, y: y - 1},
-		Position{x: x, y: y - 1},
-		Position{x: x + 1, y: y - 1},
-		Position{x: x + 1, y: y},
-		Position{x: x + 1, y: y + 1},
-		Position{x: x, y: y + 1},
-		Position{x: x - 1, y: y + 1},
+		{x: x - 1, y: y},
+		{x: x - 1, y: y - 1},
+		{x: x, y: y - 1},
+		{x: x + 1, y: y - 1},
+		{x: x + 1, y: y},
+		{x: x + 1, y: y + 1},
+		{x: x, y: y + 1},
+		{x: x - 1, y: y + 1},
 	}
 	ret := make([]Position, 0)
 	for _, c := range t {
@@ -84,14 +84,14 @@ func (p knight) Threatening(b *Board, x, y uint8) []Position {
 		return []Position{} // TODO: Should be error
 	}
 	t := []Position{
-		Position{x: x - 1, y: y - 2},
-		Position{x: x + 1, y: y - 2},
-		Position{x: x - 2, y: y - 1},
-		Position{x: x + 2, y: y - 1},
-		Position{x: x - 2, y: y + 1},
-		Position{x: x + 2, y: y + 1},
-		Position{x: x - 1, y: y + 2},
-		Position{x: x + 1, y: y + 2},
+		{x: x - 1, y: y - 2},
+		{x: x + 1, y: y - 2},
+		{x: x - 2, y: y - 1},
+		{x: x + 2, y: y - 1},
+		{x: x - 2, y: y + 1},
+		{x: x + 2, y: y + 1},
+		{x: x - 1, y: y + 2},
+		{x: x + 1, y: y + 2},
 	}
 	ret := make([]Position, 0)
 	for _, c := range t {
