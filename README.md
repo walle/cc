@@ -49,6 +49,15 @@ The algorithm used is as follows.
 $ go get github.com/walle/cc/...
 ```
 
+### Build from source
+
+```shell
+$ go get github.com/walle/cc/...
+$ cd $GOPATH/src/github.com/walle/cc
+$ go build -o cc cmd/cc/main.go
+$ ./cc -h
+```
+
 ## Usage
 
 ```shell
