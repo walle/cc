@@ -18,7 +18,7 @@ type rook cell
 type knight cell
 
 // The pieces available
-// Since they don't carry state use one instace
+// Since they don't carry state use one instance
 const (
 	Blank  blank  = 0 //"."
 	Dead   dead   = 1 //"X"

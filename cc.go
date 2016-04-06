@@ -52,13 +52,13 @@ func Solve(columns, rows uint8, pieces []Piece) map[string]bool {
 		}
 	}
 
-	// Syncronize the go routines by closing the channel when they are finished
+	// Synchronize the go routines by closing the channel when they are finished
 	go func(wg *sync.WaitGroup, ch chan string) {
 		wg.Wait()
 		close(ch)
 	}(wg, ch)
 
-	// Syncronize the read from the channel so we dont exit to fast
+	// Synchronize the read from the channel so we don't exit to fast
 	done := make(chan bool, 1)
 	solutions := make(map[string]bool)
 	go func(ch <-chan string, done chan<- bool) {
@@ -104,7 +104,7 @@ func place(board Board, pieces []Piece, ch chan<- string) {
 
 			if canPlace {
 
-				// Create a copy of the current board to use when reqursing down
+				// Create a copy of the current board to use when recursing down
 				b2 := Board{
 					columns: board.columns,
 					rows:    board.rows,
