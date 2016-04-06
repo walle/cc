@@ -35,6 +35,9 @@ func NewBoardFromString(columns, rows uint8, notation string) (Board, error) {
 	b := NewBoard(columns, rows)
 	ps := strings.Split(notation, ",")
 	for _, p := range ps {
+		if len(p) != 3 {
+			return b, fmt.Errorf("cc: the notation %s is not valid", p)
+		}
 		v := string(p[0])
 		xs := p[1]
 		ys := p[2]
@@ -51,6 +54,8 @@ func NewBoardFromString(columns, rows uint8, notation string) (Board, error) {
 			cc = cell(Bishop)
 		case "N":
 			cc = cell(Knight)
+		default:
+			return b, fmt.Errorf("cc: piece %s is not recognized", v)
 		}
 
 		x := uint8(int(xs) - 97)

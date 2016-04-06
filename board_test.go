@@ -54,4 +54,14 @@ func TestNewBoardFromString(t *testing.T) {
 	if b.Notation() != notation {
 		t.Errorf("Expected %s got %s", notation, b.Notation())
 	}
+	notation = "Rxyb1,Fa2"
+	b, err = NewBoardFromString(2, 2, notation)
+	if err == nil {
+		t.Errorf("Error did not occur with misformed input")
+	}
+	notation = "Rb1,Fa2"
+	b, err = NewBoardFromString(2, 2, notation)
+	if err == nil {
+		t.Errorf("Error did not occur with misformed input")
+	}
 }
