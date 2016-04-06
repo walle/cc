@@ -1,10 +1,12 @@
 package cc
 
+import "fmt"
+
 // Piece is the interface used to be able to use different implementation details
 // for the different kinds of pieces.
 type Piece interface {
 	String() string
-	Threatening(b *Board, x, y uint8) []position
+	Threatening(b *Board, x, y uint8) ([]position, error)
 }
 
 type blank cell
@@ -27,9 +29,11 @@ const (
 	Knight knight = 9 //"N" //"♞"
 )
 
-func (p rook) Threatening(b *Board, x, y uint8) []position {
-	if x < 0 || y < 0 || x >= b.columns || y >= b.rows {
-		return []position{}
+func (p rook) Threatening(b *Board, x, y uint8) ([]position, error) {
+	if x >= b.columns || y >= b.rows {
+		return []position{},
+			fmt.Errorf("cc: position (%d,%d) is out of bounds on board (%d, %d)",
+				x, y, b.columns, b.rows)
 	}
 	var ret []position
 	for i := uint8(0); i < b.columns; i++ {
@@ -42,16 +46,18 @@ func (p rook) Threatening(b *Board, x, y uint8) []position {
 			}
 		}
 	}
-	return ret
+	return ret, nil
 }
 
 func (p rook) String() string {
 	return "R"
 }
 
-func (p king) Threatening(b *Board, x, y uint8) []position {
-	if x < 0 || y < 0 || x >= b.columns || y >= b.rows {
-		return []position{}
+func (p king) Threatening(b *Board, x, y uint8) ([]position, error) {
+	if x >= b.columns || y >= b.rows {
+		return []position{},
+			fmt.Errorf("cc: position (%d,%d) is out of bounds on board (%d, %d)",
+				x, y, b.columns, b.rows)
 	}
 	t := []position{
 		{x: x - 1, y: y},
@@ -65,21 +71,23 @@ func (p king) Threatening(b *Board, x, y uint8) []position {
 	}
 	var ret []position
 	for _, c := range t {
-		if c.x < 0 || c.y < 0 || c.x >= b.columns || c.y >= b.rows {
+		if c.x >= b.columns || c.y >= b.rows {
 			continue
 		}
 		ret = append(ret, c)
 	}
-	return ret
+	return ret, nil
 }
 
 func (p king) String() string {
 	return "K"
 }
 
-func (p knight) Threatening(b *Board, x, y uint8) []position {
-	if x < 0 || y < 0 || x >= b.columns || y >= b.rows {
-		return []position{} // TODO: Should be error
+func (p knight) Threatening(b *Board, x, y uint8) ([]position, error) {
+	if x >= b.columns || y >= b.rows {
+		return []position{},
+			fmt.Errorf("cc: position (%d,%d) is out of bounds on board (%d, %d)",
+				x, y, b.columns, b.rows)
 	}
 	t := []position{
 		{x: x - 1, y: y - 2},
@@ -98,31 +106,37 @@ func (p knight) Threatening(b *Board, x, y uint8) []position {
 		}
 		ret = append(ret, c)
 	}
-	return ret
+	return ret, nil
 }
 
 func (p knight) String() string {
 	return "N"
 }
 
-func (p queen) Threatening(b *Board, x, y uint8) []position {
-	if x < 0 || y < 0 || x >= b.columns || y >= b.rows {
-		return []position{}
+func (p queen) Threatening(b *Board, x, y uint8) ([]position, error) {
+	if x >= b.columns || y >= b.rows {
+		return []position{},
+			fmt.Errorf("cc: position (%d,%d) is out of bounds on board (%d, %d)",
+				x, y, b.columns, b.rows)
 	}
 
 	ret := make([]position, 0, b.columns*b.rows)
-	ret = append(ret, Rook.Threatening(b, x, y)...)
-	ret = append(ret, Bishop.Threatening(b, x, y)...)
-	return ret
+	tr, _ := Rook.Threatening(b, x, y)
+	ret = append(ret, tr...)
+	tr, _ = Bishop.Threatening(b, x, y)
+	ret = append(ret, tr...)
+	return ret, nil
 }
 
 func (p queen) String() string {
 	return "Q"
 }
 
-func (p bishop) Threatening(b *Board, x, y uint8) []position {
-	if x < 0 || y < 0 || x >= b.columns || y >= b.rows {
-		return []position{}
+func (p bishop) Threatening(b *Board, x, y uint8) ([]position, error) {
+	if x >= b.columns || y >= b.rows {
+		return []position{},
+			fmt.Errorf("cc: position (%d,%d) is out of bounds on board (%d, %d)",
+				x, y, b.columns, b.rows)
 	}
 	n := b.columns
 	if b.rows > n {
@@ -147,7 +161,7 @@ func (p bishop) Threatening(b *Board, x, y uint8) []position {
 			ret = append(ret, position{x: x2, y: y1})
 		}
 	}
-	return ret
+	return ret, nil
 }
 
 func (p bishop) String() string {
@@ -158,14 +172,14 @@ func (p blank) String() string {
 	return "."
 }
 
-func (p blank) Threatening(b *Board, x, y uint8) []position {
-	return []position{}
+func (p blank) Threatening(b *Board, x, y uint8) ([]position, error) {
+	return []position{}, nil
 }
 
 func (p dead) String() string {
 	return "X"
 }
 
-func (p dead) Threatening(b *Board, x, y uint8) []position {
-	return []position{}
+func (p dead) Threatening(b *Board, x, y uint8) ([]position, error) {
+	return []position{}, nil
 }

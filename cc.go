@@ -42,7 +42,7 @@ func Solve(columns, rows uint8, pieces []Piece) map[string]bool {
 				b.cells[j][i] = cc // Place the piece
 
 				// Mark all dead cells
-				tr := p.Threatening(&b, i, j)
+				tr, _ := p.Threatening(&b, i, j)
 				for _, t := range tr {
 					b.cells[t.y][t.x] = cell(Dead)
 				}
@@ -94,7 +94,7 @@ func place(board Board, pieces []Piece, ch chan<- string) {
 
 			// Check so we don't threaten a placed piece
 			canPlace := true
-			tr := p.Threatening(&board, i, j)
+			tr, _ := p.Threatening(&board, i, j)
 			for _, t := range tr {
 				tc := board.cells[t.y][t.x]
 				if tc > cell(Dead) {
