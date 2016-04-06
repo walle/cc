@@ -34,6 +34,9 @@ func NewBoard(columns, rows uint8) Board {
 func NewBoardFromString(columns, rows uint8, notation string) (Board, error) {
 	b := NewBoard(columns, rows)
 	ps := strings.Split(notation, ",")
+	if len(ps) == 1 && strings.TrimSpace(ps[0]) == "" {
+		return b, nil
+	}
 	for _, p := range ps {
 		if len(p) != 3 {
 			return b, fmt.Errorf("cc: the notation %s is not valid", p)
@@ -98,6 +101,10 @@ func (b Board) Notation() string {
 
 			ret += fmt.Sprintf("%s%s%d,", cc, string(97+i), j+1)
 		}
+	}
+
+	if len(ret) == 0 {
+		return ""
 	}
 
 	return ret[0 : len(ret)-1]
